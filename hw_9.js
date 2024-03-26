@@ -15,43 +15,66 @@ const addFormButtonElement = document.getElementById('add-form-button');
 const nameInputElement = document.getElementById('name-input');
 const commentInputElement = document.getElementById('comment-input');
 
+// Функция для получения даты и времени в формате: дд.мм.гг чч:мм
 const getTime = () => {
-    let date = new Date();
+  let date = new Date();
 
-    let timeOptions = { hour: '2-digit', minute: '2-digit' };
-    let formattedTime = date.toLocaleTimeString('ru-Ru', timeOptions);
+  let timeOptions = { hour: '2-digit', minute: '2-digit' };
+  let formattedTime = date.toLocaleTimeString('ru-Ru', timeOptions);
 
-    let dateOptions = { day: '2-digit', month: '2-digit', year: '2-digit' };
-    let formattedDate = date.toLocaleDateString('ru-Ru', dateOptions);
+  let dateOptions = { day: '2-digit', month: '2-digit', year: '2-digit' };
+  let formattedDate = date.toLocaleDateString('ru-Ru', dateOptions);
 
-    return formattedDate + ' ' + formattedTime;
+  return formattedDate + ' ' + formattedTime;
 }
 
+// Функция для дезактивирования кнопки "Написать"
+const disableButton = () => {
+  addFormButtonElement.disabled = true;
+  addFormButtonElement.classList.add('add-form-button_disabled');
+}
+
+// Функция для активирования кнопки "Написать"
+const enableButton = () => {
+  addFormButtonElement.disabled = false;
+  addFormButtonElement.classList.remove('add-form-button_disabled');
+}
+
+// Изначально при пустых полях ввода кнопка "Написать" неактивна.
+disableButton();
+
+// Валидация полей ввода: кнопка "Написать" активна, только если оба поля ввода заполнены.
+// Если, заполнив оба поля, пользователь решил очистить значения в одном из полей, 
+// кнопка "Написать" становится неактивной.
+nameInputElement.addEventListener('input', (e) => {
+  if (e.target.value === '') {
+    disableButton();
+  }
+  if (e.target.value !== '' && commentInputElement.value !== '') {
+    enableButton();
+  }
+});
+
+commentInputElement.addEventListener('input', (e) => {
+  if (e.target.value === '') {
+    disableButton();
+  }
+  if (e.target.value !== '' && nameInputElement.value !== '') {
+    enableButton();
+  }
+});
+
+// При нажатии на кнопку "Написать": комментарий повляется на странице, поля ввода очищаются,
+// кнопка "Написать" дезактивируется.
 addFormButtonElement.addEventListener('click', () => {
-    let existingComments = commentListElement.innerHTML;
-    let name = nameInputElement.value;
-    let date = getTime();
-    let comment = commentInputElement.value;
-
-    nameInputElement.classList.remove('error');
-    commentInputElement.classList.remove('error');
-
-    if (name === '') {
-        nameInputElement.classList.add('error');
-        return;
-    }
-    if (comment === '') {
-        commentInputElement.classList.add('error');
-        return;
-    }
-    commentListElement.innerHTML = existingComments + `<li class="comment">
+  commentListElement.innerHTML = commentListElement.innerHTML + `<li class="comment">
     <div class="comment-header">
-      <div>${name}</div>
-      <div>${date}</div>
+      <div>${nameInputElement.value}</div>
+      <div>${getTime()}</div>
     </div>
     <div class="comment-body">
       <div class="comment-text">
-        ${comment}
+        ${commentInputElement.value}
       </div>
     </div>
     <div class="comment-footer">
@@ -61,6 +84,11 @@ addFormButtonElement.addEventListener('click', () => {
       </div>
     </div>
   </li>`;
+  nameInputElement.value = '';
+  commentInputElement.value = '';
+  disableButton();
 });
+
+
 
 

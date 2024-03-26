@@ -136,6 +136,8 @@ body {
     opacity: 0.9;
   }
 
-  .error {
-    background-color: coral;
+  .add-form-button_disabled {
+    background-color: #ccc;
+    pointer-events: none;
   }
+
