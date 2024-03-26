@@ -8,12 +8,23 @@
 - У полей «Имя» и «Комментарий» есть валидация: нельзя добавить комментарий, не указав своего имени или текста комментария.
 - При добавлении комментария в списке подставляются текущая дата и время.
 - Новые комментарии появляются с 0 лайков.
+
+Дополнительные задания:
+- Расширенная валидация:
+Сделайте так, чтобы кнопка «Написать» выключалась (становится некликабельной, красится в серый цвет), если имя или текст в форме незаполненные.
+- Добавление элемента в список по нажатию Enter
+Целевой сценарий продукта: «Я как пользователь могу набрать в поле ввода имя и текст, нажать клавишу Enter, и комментарий добавится в список».
+Нажатие клавиши Enter должно вызывать ту же логику, которая срабатывает при клике на кнопку «Добавить».
+- Удаление последнего элемента
+Добавьте на страницу кнопку «Удалить последний комментарий», при клике на которую из списка удаляется последний комментарий.
 */
 
 const commentListElement = document.getElementById('comment-list');
 const addFormButtonElement = document.getElementById('add-form-button');
 const nameInputElement = document.getElementById('name-input');
 const commentInputElement = document.getElementById('comment-input');
+const inputFormElement = document.getElementById('input-form');
+const removeCommentButtonElement = document.getElementById('remove-comment-button');
 
 // Функция для получения даты и времени в формате: дд.мм.гг чч:мм
 const getTime = () => {
@@ -88,6 +99,23 @@ addFormButtonElement.addEventListener('click', () => {
   commentInputElement.value = '';
   disableButton();
 });
+
+// Добавление комментария на страницу по нажатию Enter
+inputFormElement.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') {
+    addFormButtonElement.click();
+  }
+});
+
+// Удаление последнего комментария 
+removeCommentButtonElement.addEventListener('click', () => {
+  let index = commentListElement.innerHTML.lastIndexOf('<li class="comment">');
+  commentListElement.innerHTML = commentListElement.innerHTML.substring(0, index);
+});
+
+
+
+ 
 
 
 
