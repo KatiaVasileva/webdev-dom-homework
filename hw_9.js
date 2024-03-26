@@ -58,19 +58,19 @@ disableButton();
 // Если, заполнив оба поля, пользователь решил очистить значения в одном из полей, 
 // кнопка "Написать" становится неактивной.
 nameInputElement.addEventListener('input', (e) => {
-  if (e.target.value === '') {
+  if (e.target.value.trim() === '') {
     disableButton();
   }
-  if (e.target.value !== '' && commentInputElement.value !== '') {
+  if (e.target.value.trim() !== '' && commentInputElement.value.trim() !== '') {
     enableButton();
   }
 });
 
 commentInputElement.addEventListener('input', (e) => {
-  if (e.target.value === '') {
+  if (e.target.value.trim() === '') {
     disableButton();
   }
-  if (e.target.value !== '' && nameInputElement.value !== '') {
+  if (e.target.value.trim() !== '' && nameInputElement.value.trim() !== '') {
     enableButton();
   }
 });
