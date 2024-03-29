@@ -23,7 +23,9 @@ const nameInputElement = document.getElementById('name-input');
 const commentInputElement = document.getElementById('comment-input');
 const inputFormElement = document.getElementById('input-form');
 const removeCommentButtonElement = document.getElementById('remove-comment-button');
+const likeButtonElements = document.querySelectorAll('.like-button');
 
+// Массив для хранения комментариев
 const comments = [
     {
         name: "Глеб Фокин",
@@ -41,6 +43,8 @@ const comments = [
     }
 ];
 
+// Инициализация обработчика события для кнопок лайков: при нажатии на пустое сердечко оно закрашивается и 
+// счетчик увеличивается на единицу, при нажатии на закрашенное сердечко оно становится пустым и счетчик уменшается на единицу.
 const initLikeButtonListener = () => {
     const likeButtonElements = document.querySelectorAll('.like-button');
     for (const likeButtonElement of likeButtonElements) {
@@ -59,9 +63,10 @@ const initLikeButtonListener = () => {
     }
 }
 
+// Рендер-функция, которая отрисовывает список комментариев.
 const renderComments = () => {
     const commentHtml = comments.map((comment, index) => {
-        return `<li class="comment">
+        return `<li class="comment" data-index="${index}">
         <div class="comment-header">
           <div>${comment.name}</div>
           <div>${comment.date}</div>
@@ -82,6 +87,7 @@ const renderComments = () => {
     initLikeButtonListener();
 }
 
+// Вызов рендер-функции для отрисовки списка комментариев
 renderComments();
 
 // Функция для получения даты и времени в формате: дд.мм.гг чч:мм
@@ -159,10 +165,11 @@ inputFormElement.addEventListener('keyup', (e) => {
     }
 });
 
-// Удаление последнего комментария 
+// Удаление последнего комментария через JS массив
 removeCommentButtonElement.addEventListener('click', () => {
-    let index = commentListElement.innerHTML.lastIndexOf('<li class="comment">');
-    commentListElement.innerHTML = commentListElement.innerHTML.substring(0, index);
+    let index = comments.length - 1;
+    comments.splice(index, 1);
+    renderComments();
 });
 
 
