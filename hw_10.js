@@ -30,12 +30,12 @@ JavaScript должен использовать этот массив для с
 + При клике на кнопку «Сохранить» введенные изменения должны быть сохранены в массив данных, а интерфейс должен вернуться в исходное состояние.
 */
 
-const commentListElement = document.getElementById('comment-list');
-const addFormButtonElement = document.getElementById('add-form-button');
-const nameInputElement = document.getElementById('name-input');
-const commentInputElement = document.getElementById('comment-input');
-const inputFormElement = document.getElementById('input-form');
-const removeCommentButtonElement = document.getElementById('remove-comment-button');
+const commentListElement = document.querySelector('#comment-list');
+const addFormButtonElement = document.querySelector('#add-form-button');
+const nameInputElement = document.querySelector('#name-input');
+const commentInputElement = document.querySelector('#comment-input');
+const inputFormElement = document.querySelector('#input-form');
+const removeCommentButtonElement = document.querySelector('#remove-comment-button');
 const likeButtonElements = document.querySelectorAll('.like-button');
 
 // Массив для хранения комментариев
