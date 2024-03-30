@@ -60,9 +60,16 @@ body {
     margin-bottom: 32px;
   }
 
+  .comment-body_none,
+  .edit-comment-form_none,
+  .edit-comment-button_none,
+  .save-comment-button_none {
+    display: none;
+  }
+
   .comment-text {
     font-size: 32px;
-  }
+  } 
 
   .likes {
     display: flex;
@@ -99,11 +106,16 @@ body {
   }
 
   .add-form-name,
-  .add-form-text {
+  .add-form-text,
+  .edit-comment-form-text {
     font-size: 16px;
     font-family: Helvetica;
     border-radius: 8px;
     border: none;
+  }
+
+  .edit-comment-form-text {
+    width: 460px;
   }
 
   .add-form-name {
@@ -111,7 +123,8 @@ body {
     padding: 11px 22px;
   }
 
-  .add-form-text {
+  .add-form-text,
+  .edit-comment-form-text {
     margin-top: 12px;
     padding: 22px;
     resize: none;
@@ -122,7 +135,10 @@ body {
     justify-content: flex-end;
   }
 
-  .add-form-button, .remove-comment-button {
+  .add-form-button, 
+  .remove-comment-button, 
+  .edit-comment-button,
+  .save-comment-button {
     margin-top: 24px;
     font-size: 24px;
     padding: 10px 20px;
@@ -132,7 +148,9 @@ body {
     cursor: pointer;
   }
 
-  .add-form-button:hover, .remove-comment-button:hover {
+  .add-form-button:hover, 
+  .remove-comment-button:hover,
+  .edit-comment-button:hover {
     opacity: 0.9;
   }
 

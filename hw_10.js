@@ -15,6 +15,19 @@ JavaScript должен использовать этот массив для с
 + Изменение количества лайков не должно происходить путем изменения свойства innerHTM. Нужно работать только с исходным массивом данных.
 + При добавлении нового комментария кнопки лайков продолжают работать корректно.
 + В коде реализована рендер-функция, которая отрисовывает список комментариев.
+
+Дополнительное задание:
+Реализуйте дополнительный функционал ленты комментариев: возможность редактировать любые комментарии.
+Вот целевой сценарий: «Я (как пользователь) могу отредактировать любой уже написанный комментарий».
+
+Критерии выполнения задания:
++ Пользователь должен иметь возможность отредактировать любой уже написанный комментарий.
++ Для этого под каждым комментарием должна появиться кнопка «Редактировать».
++ При клике на кнопку «Редактировать» текст комментария должен замениться полем ввода в формате textarea, 
+а кнопка «Редактировать» должна быть заменена на кнопку «Сохранить».
++ В поле ввода должен быть автоматически подставлен текущий текст комментария для удобного редактирования.
++ Пользователь может внести изменения в текст комментария, используя поле ввода.
++ При клике на кнопку «Сохранить» введенные изменения должны быть сохранены в массив данных, а интерфейс должен вернуться в исходное состояние.
 */
 
 const commentListElement = document.getElementById('comment-list');
@@ -32,14 +45,16 @@ const comments = [
         date: "12.02.22 12:18",
         text: "Это будет первый комментарий на этой странице",
         isLiked: false,
-        likes: 3
+        likes: 3,
+        isEdit: false
     },
     {
         name: "Варвара Н.",
         date: "13.02.22 19:22",
         text: "Мне нравится как оформлена эта страница! ❤",
         isLiked: true,
-        likes: 75
+        likes: 75,
+        isEdit: false
     }
 ];
 
@@ -63,17 +78,60 @@ const initLikeButtonListener = () => {
     }
 }
 
+// Инициализация обработчика событий для кнопок редактирования комментария: при нажатии на кнопку "Редактировать" текст комментария заменяется
+// на поле ввода, в которое подставлен текущий текст комментария, а кнопка "Редактировать" заменяется на кнопку "Сохранить".
+const initEditButtonListener = () => {
+    const editButtonElements = document.querySelectorAll('.edit-comment-button');
+    for (const editButtonElement of editButtonElements) {
+        editButtonElement.addEventListener('click', (e) => {
+            const index = editButtonElement.dataset.index;
+            if (comments[index].isEdit === false) {
+                comments[index].isEdit = true;
+            }
+            renderComments();
+        })
+    }
+}
+
+// Инициализация обработчика событий для кнопок сохранения отредактированного комментария: при нажатии на кнопку "Сохранить" поля ввода заменяется
+// на отредактированный комментарий, который сохраняется в массиве JS, а кнопка "Сохранить" заменяется на кнопку "Редактировать".
+const initSaveButtonListener = () => {
+    const saveButtonElements = document.querySelectorAll('.save-comment-button');
+    for (const saveButtonElement of saveButtonElements) {
+        saveButtonElement.addEventListener('click', (e) => {
+            const index = saveButtonElement.dataset.index;
+            if (comments[index].isEdit === true) {
+                comments[index].isEdit = false;
+                comments[index].text = document.querySelectorAll('.edit-comment-form-text')[index].value;
+            }
+            renderComments();
+        })
+    }
+}
+
 // Рендер-функция, которая отрисовывает список комментариев.
 const renderComments = () => {
     const commentHtml = comments.map((comment, index) => {
-        return `<li class="comment" data-index="${index}">
+        return `<li class="comment">
         <div class="comment-header">
           <div>${comment.name}</div>
           <div>${comment.date}</div>
         </div>
-        <div class="comment-body">
+        <div class="${comment.isEdit === false ? 'comment-body' : 'comment-body_none'}">
           <div class="comment-text">${comment.text}</div>
         </div>
+        <div class="${comment.isEdit === true ? 'edit-comment-form' : 'edit-comment-form_none'}">
+            <textarea
+                id="comment-input"
+                type="textarea"
+                class="edit-comment-form-text"
+                placeholder="Введите ваш комментарий"
+                rows="4"
+                data-index="${index}"
+            >${comment.text}</textarea>
+        </div>
+        <button data-index="${index}" id="edit-comment-button" class="${comment.isEdit === false ? 'edit-comment-button' : 'edit-comment-button_none'}">Редактировать</button>
+        <button data-index="${index}" id="save-comment-button" class="${comment.isEdit === true ? 'save-comment-button' : 'save-comment-button_none'}">Сохранить</button>
         <div class="comment-footer">
           <div class="likes">
             <span class="likes-counter">${comment.likes}</span>
@@ -85,6 +143,8 @@ const renderComments = () => {
     commentListElement.innerHTML = commentHtml;
 
     initLikeButtonListener();
+    initEditButtonListener();
+    initSaveButtonListener();
 }
 
 // Вызов рендер-функции для отрисовки списка комментариев
@@ -139,7 +199,7 @@ commentInputElement.addEventListener('input', (e) => {
     }
 });
 
-// При нажатии на кнопку "Написать": комментарий повляется на странице, поля ввода очищаются,
+// При нажатии на кнопку "Написать": комментарий сохраняется в массиве JS и отрисовывается на странице, поля ввода очищаются,
 // кнопка "Написать" дезактивируется.
 addFormButtonElement.addEventListener('click', () => {
     comments.push({
@@ -147,7 +207,8 @@ addFormButtonElement.addEventListener('click', () => {
         date: getTime(),
         text: commentInputElement.value,
         isLiked: false,
-        likes: 0
+        likes: 0,
+        isEdit: false
     });
 
     renderComments();
