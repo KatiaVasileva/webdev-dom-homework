@@ -72,6 +72,14 @@ body {
     white-space: pre-line;
   } 
 
+  .quote {
+    background-color: white;
+    font-size: 20px;
+    color: black;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
   .likes {
     display: flex;
     align-items: center;

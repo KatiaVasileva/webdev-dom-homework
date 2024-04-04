@@ -16,11 +16,8 @@
     + ответ не подставляется при клике на лайк.
 + Исправлена уязвимость про HTML-теги, при отправке HTML-кода в имени или тексте он должен выводиться как текст.
 
-Что выполнено:
-- В метод renderComment() добавлен обработчик события по клику на комментарий для ответа на комментарий.
-- В обработчики события по клику на лайк, кнопки "Редактировать/Сохранить" добавлен метод stopPropagation().
-- При сохранении сожержимого полей ввода (обработчик события по клику на кнопку "Написать") в массив JS 
-все символы < и > заменяются на соответствующие специальные символы.
+Дополнительное задание:
++ Сделайте так, чтобы текст и имя автора комментария, на который отвечает пользователь, находились внутри блока «Цитаты»
 */
 
 
@@ -85,7 +82,7 @@ const initEditButtonListener = () => {
                 comments[index].isEdit = true;
             }
             renderComments();
-        })
+        });
     }
 }
 
@@ -102,10 +99,33 @@ const initSaveButtonListener = () => {
                 comments[index].text = document.querySelectorAll('.edit-comment-form-text')[index].value;
             }
             renderComments();
-        })
+        });
     }
 }
 
+// Инициализация обработчика события по клику на комментарий для ответа на комментарий: 
+// не должен срабатывать при нажатии на лайк и на кнопки "Редактировать/Сохранить"
+const initCommentReplyListener = () => {
+    const commentElements = document.querySelectorAll('.comment');
+    for (const commentElement of commentElements) {
+        commentElement.addEventListener('click', (e) => {
+            const index = commentElement.dataset.index;
+            commentInputElement.value = `QUOTE_BEGIN ${comments[index].name}: \n ${comments[index].text}QUOTE_END \n \n`;
+        });
+    }
+}
+
+// Инициализация обработчика события по клику на поле ввода редактирования комментария
+// для предотвращения всплытия события по клику на комментарий 
+// (чтобы при редактировании комментария не срабатывала событие ответа на комментарий)
+const initEditCommentListener = () => {
+    const editCommentElements = document.querySelectorAll('.edit-comment-form');
+    for (const editCommentElement of editCommentElements) {
+        editCommentElement.addEventListener('click', (e) => {
+             e.stopPropagation();
+        });
+    }
+}
 
 // Рендер-функция, которая отрисовывает список комментариев.
 const renderComments = () => {
@@ -139,20 +159,12 @@ const renderComments = () => {
       </li>`
     }).join("");
     commentListElement.innerHTML = commentHtml;
-
-    // Обработчик события по клику на комментарий для ответа на комментарий: 
-    // не должен срабатывать при нажатии на лайк, кнопки "Редактировать/Сохранить"
-    const commentElements = document.querySelectorAll('.comment');
-    for (const commentElement of commentElements) {
-        commentElement.addEventListener('click', () => {
-            const index = commentElement.dataset.index;
-            commentInputElement.value = `> ${comments[index].text} \n \n ${comments[index].name}, \n \n`;
-        });
-    }
-
+    
     initLikeButtonListener();
     initEditButtonListener();
     initSaveButtonListener();
+    initCommentReplyListener();
+    initEditCommentListener();
 }
 
 // Вызов рендер-функции для отрисовки списка комментариев
@@ -213,7 +225,8 @@ addFormButtonElement.addEventListener('click', () => {
     comments.push({
         name: nameInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
         date: getTime(),
-        text: commentInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+        text: commentInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+            .replaceAll('QUOTE_BEGIN', '<div class="quote">').replaceAll('QUOTE_END', '</div>'),
         isLiked: false,
         likes: 0,
         isEdit: false
@@ -240,11 +253,3 @@ removeCommentButtonElement.addEventListener('click', () => {
     comments.splice(index, 1);
     renderComments();
 });
-
-
-
-
-
-
-
-
