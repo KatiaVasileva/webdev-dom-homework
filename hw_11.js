@@ -109,20 +109,11 @@ const initCommentReplyListener = () => {
     const commentElements = document.querySelectorAll('.comment');
     for (const commentElement of commentElements) {
         commentElement.addEventListener('click', (e) => {
+            if (e.target.classList.contains('edit-comment-form-text')) {
+                return;
+            }
             const index = commentElement.dataset.index;
             commentInputElement.value = `QUOTE_BEGIN ${comments[index].name}: \n ${comments[index].text}QUOTE_END \n \n`;
-        });
-    }
-}
-
-// Инициализация обработчика события по клику на поле ввода редактирования комментария
-// для предотвращения всплытия события по клику на комментарий 
-// (чтобы при редактировании комментария не срабатывала событие ответа на комментарий)
-const initEditCommentListener = () => {
-    const editCommentElements = document.querySelectorAll('.edit-comment-form');
-    for (const editCommentElement of editCommentElements) {
-        editCommentElement.addEventListener('click', (e) => {
-             e.stopPropagation();
         });
     }
 }
@@ -164,7 +155,6 @@ const renderComments = () => {
     initEditButtonListener();
     initSaveButtonListener();
     initCommentReplyListener();
-    initEditCommentListener();
 }
 
 // Вызов рендер-функции для отрисовки списка комментариев
