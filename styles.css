@@ -168,3 +168,17 @@ body {
     pointer-events: none;
   }
 
+  .comment-add-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .spinner {
+    /* background-color: #7334ea; */
+    width: 10%;
+    height: 10%;
+  }
+
