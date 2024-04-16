@@ -128,7 +128,7 @@ body {
   }
 
   .add-form-name {
-    width: 300px;
+    width: 340px;
     padding: 11px 22px;
   }
 
@@ -166,5 +166,19 @@ body {
   .add-form-button_disabled {
     background-color: #ccc;
     pointer-events: none;
+  }
+
+  .comment-add-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .spinner {
+    /* background-color: #7334ea; */
+    width: 10%;
+    height: 10%;
   }
 
