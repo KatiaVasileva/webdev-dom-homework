@@ -183,13 +183,13 @@ const renderInputBox = () => {
         id="name-input"
         type="text"
         class="add-form-name"
-        placeholder="Введите ваше имя"
+        placeholder="Введите ваше имя (не менее трех символов)"
     />
     <textarea
         id="comment-input"
         type="textarea"
         class="add-form-text"
-        placeholder="Введите ваш комментарий"
+        placeholder="Введите ваш комментарий (не менее трех символов)"
         rows="4"
     ></textarea>
     <div class="add-form-row">
@@ -224,10 +224,10 @@ function initNameInputListener() {
     const commentInputElement = document.querySelector('#comment-input');
 
     nameInputElement.addEventListener('input', (e) => {
-        if (e.target.value.trim() === '') {
+        if (e.target.value.trim().length < 3) {
             disableButton();
         }
-        if (e.target.value.trim() !== '' && commentInputElement.value.trim() !== '') {
+        if (commentInputElement.value.trim() !== '' && e.target.value.trim().length >= 3) {
             enableButton();
         }
     });
@@ -238,10 +238,10 @@ function initCommentInputListener() {
     const nameInputElement = document.querySelector('#name-input');
 
     commentInputElement.addEventListener('input', (e) => {
-        if (e.target.value.trim() === '') {
+        if (e.target.value.trim().length < 3) {
             disableButton();
         }
-        if (e.target.value.trim() !== '' && nameInputElement.value.trim() !== '') {
+        if (nameInputElement.value.trim() !== '' && e.target.value.trim().length >= 3) {
             enableButton();
         }
     });
@@ -283,8 +283,8 @@ function initAddFormListener() {
                 })
             });
 
-            nameInputElement.value = '';
-            commentInputElement.value = '';
+            // nameInputElement.value = '';
+            // commentInputElement.value = '';
 
             renderInputBox();
 
@@ -299,7 +299,7 @@ const inputFormElement = document.querySelector('#input-form');
 
 inputFormElement.addEventListener('keyup', (e) => {
     const addFormButtonElement = document.querySelector('.add-form-button');
-    
+
     if (e.key === 'Enter') {
         addFormButtonElement.click();
     }
