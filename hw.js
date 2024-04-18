@@ -5,6 +5,17 @@
 
 + Начните с того, что переделайте все вызовы then на цепочки промисов, вынесите код получения списка комментариев в отдельную функцию. 
 + Используйте «замедление интернета» в консоли разработчика на вкладке сеть, чтобы отладить работу лоадеров.
+
+Дополнительное задание:
+Реализуем сценарий
++ Я как пользователь понимаю, что лайк ставится/снимается и мне нужно подождать, пока он поставится.
+
+Условия проверки и выполнения задания:
+
++ В коде приложения нет вложенных then, везде используются цепочки промисов.
++ Целевые сценарии выполнены:
+    - при запуске приложения отображается сообщение о загрузке списка комментариев, при добавлении нового комментария это сообщение не отображается;
+    + при добавлении нового комментария, на время выполнения запроса, скрывается форма добавления, вместо нее отображается надпись «Комментарий добавляется».
 */
 
 const commentListElement = document.querySelector('#comment-list');
@@ -50,14 +61,18 @@ const initLikeButtonListener = () => {
         likeButtonElement.addEventListener('click', (e) => {
             e.stopPropagation();
             const index = likeButtonElement.dataset.index;
-            if (comments[index].isLiked === false) {
-                comments[index].isLiked = true;
-                comments[index].likes++;
-            } else {
-                comments[index].isLiked = false;
-                comments[index].likes--;
-            }
-            renderComments();
+
+            likeButtonElement.classList.add('-loading-like');
+
+            delay(2000)
+                .then(() => {
+                    comments[index].likes = comments[index].isLiked
+                        ? comments[index].likes - 1
+                        : comments[index].likes + 1;
+                    comments[index].isLiked = !comments[index].isLiked;
+                    likeButtonElement.classList.remove('-loading-like');
+                    renderComments();
+                });
         });
 
     }
@@ -298,3 +313,12 @@ removeCommentButtonElement.addEventListener('click', () => {
     comments.splice(index, 1);
     renderComments();
 });
+
+// Функция для имитации запросов в API
+function delay(interval) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, interval);
+    });
+}
