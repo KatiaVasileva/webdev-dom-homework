@@ -14,19 +14,21 @@
 
 + В коде приложения нет вложенных then, везде используются цепочки промисов.
 + Целевые сценарии выполнены:
-    - при запуске приложения отображается сообщение о загрузке списка комментариев, при добавлении нового комментария это сообщение не отображается;
+    + при запуске приложения отображается сообщение о загрузке списка комментариев, при добавлении нового комментария это сообщение не отображается;
     + при добавлении нового комментария, на время выполнения запроса, скрывается форма добавления, вместо нее отображается надпись «Комментарий добавляется».
 */
 
 const commentListElement = document.querySelector('#comment-list');
 const removeCommentButtonElement = document.querySelector('#remove-comment-button');
 const addFormElement = document.querySelector('.add-form');
+const commentLoaderElement = document.querySelector('.comment-loader');
 
 // Массив для сохранения комментариев, извлеченных из API
 let comments = [];
 
 // Функция с GET-запросом для получения списка комментариев
 const getAllComments = () => {
+
     return fetch(
         "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
         {
@@ -45,8 +47,9 @@ const getAllComments = () => {
                     likes: comment.likes
                 }
             });
+            commentLoaderElement.classList.add('hide-comment-loader');
             renderComments();
-        });
+        })
 };
 
 // Вызов функции с GET-запросом для получения списка комментариев из API
@@ -213,9 +216,6 @@ const renderInputBox = () => {
     disableButton();
 
 }
-
-// Вызов рендер-функции для отрисовки списка комментариев
-renderComments();
 
 // Вызов рендер-функции для отрисовки формы ввода
 renderInputBox();

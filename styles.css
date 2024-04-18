@@ -34,6 +34,7 @@ body {
     margin: 0;
     padding: 0;
     list-style: none;
+    color: #ffffff;
   }
 
   .comment,
@@ -196,8 +197,11 @@ body {
   }
 
   .spinner {
-    /* background-color: #7334ea; */
     width: 10%;
     height: 10%;
+  }
+
+  .hide-comment-loader {
+    display: none;
   }
 
