@@ -4,6 +4,7 @@
 - Я как пользователь при добавлении комментария понимаю, что мне нужно подождать и не могу случайно отправить коммент повторно во время загрузки предыдущего.
 
 + Начните с того, что переделайте все вызовы then на цепочки промисов, вынесите код получения списка комментариев в отдельную функцию. 
++ Используйте «замедление интернета» в консоли разработчика на вкладке сеть, чтобы отладить работу лоадеров.
 */
 
 const commentListElement = document.querySelector('#comment-list');
@@ -14,8 +15,8 @@ const addFormElement = document.querySelector('.add-form');
 let comments = [];
 
 // Функция с GET-запросом для получения списка комментариев
-function getAllComments() {
-    fetch(
+const getAllComments = () => {
+    return fetch(
         "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
         {
             method: "GET"
@@ -257,26 +258,26 @@ function initAddFormListener() {
         </div>
         `;
 
-        setTimeout(() => {
-            fetch(
-                "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        text: commentInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
-                        name: nameInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
-                            .replaceAll('QUOTE_BEGIN', '<div class="quote">').replaceAll('QUOTE_END', '</div>')
-                    })
-                }
-            )
-                .then((response) => {
-                    return response.json();
+        fetch(
+            "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    text: commentInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+                    name: nameInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+                        .replaceAll('QUOTE_BEGIN', '<div class="quote">').replaceAll('QUOTE_END', '</div>')
                 })
-                .then(() => {
-                    renderInputBox();
-                    getAllComments();
-                })
-        }, 1000);
+            }
+        )
+            .then((response) => {
+                return response.json();
+            })
+            .then(() => {
+                return getAllComments();
+            })
+            .then(() => {
+                renderInputBox();
+            })
     });
 };
 
