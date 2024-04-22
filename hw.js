@@ -1,36 +1,43 @@
 /* Задание
-Подключите приложение комментариев к API комментариев, в результате приложение должно получать список комментариев из API 
-и добавлять новый комментарий через API.
+В этой домашке мы покажем пользователю приложения состояние, когда данные загружаются:
+- Я как пользователь при запуске приложения понимаю, что данные загружаются и мне нужно немного подождать.
+- Я как пользователь при добавлении комментария понимаю, что мне нужно подождать и не могу случайно отправить коммент повторно во время загрузки предыдущего.
+
++ Начните с того, что переделайте все вызовы then на цепочки промисов, вынесите код получения списка комментариев в отдельную функцию. 
++ Используйте «замедление интернета» в консоли разработчика на вкладке сеть, чтобы отладить работу лоадеров.
+
+Дополнительное задание:
+Реализуем сценарий
++ Я как пользователь понимаю, что лайк ставится/снимается и мне нужно подождать, пока он поставится.
 
 Условия проверки и выполнения задания:
 
-+ После перезагрузки страницы список комментариев не сбрасывается:
-    + при запуске приложение загружает список комментариев из API и выводит его на экран;
-    + при добавлении комментария приложение сохраняет комментарий в API, а затем выводит добавленный комментарий в список.
-+ Функционал лайков работает локально, то есть можно поставить и снять лайк, но после перезагрузки страницы счетчик лайков сбросится.
-
-Дополнительное задание
-Добавление коммента в API занимает некоторое время, и до тех пор, пока запрос не завершится, комментарий в списке еще не появится.
-Задача: показать пользователю, что с приложением всё в порядке, просто запрос еще не выполнился. 
-Для этого на время загрузки скроем форму добавления, вместо нее покажем текст «Комментарий добавляется»
++ В коде приложения нет вложенных then, везде используются цепочки промисов.
++ Целевые сценарии выполнены:
+    + при запуске приложения отображается сообщение о загрузке списка комментариев, при добавлении нового комментария это сообщение не отображается;
+    + при добавлении нового комментария, на время выполнения запроса, скрывается форма добавления, вместо нее отображается надпись «Комментарий добавляется».
 */
 
 const commentListElement = document.querySelector('#comment-list');
 const removeCommentButtonElement = document.querySelector('#remove-comment-button');
 const addFormElement = document.querySelector('.add-form');
+const commentLoaderElement = document.querySelector('.comment-loader');
 
 // Массив для сохранения комментариев, извлеченных из API
 let comments = [];
 
 // Функция с GET-запросом для получения списка комментариев
-function getAllComments() {
-    fetch(
+const getAllComments = () => {
+
+    return fetch(
         "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
         {
             method: "GET"
-        }
-    ).then((response) => {
-        response.json().then((responseData) => {
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((responseData) => {
             comments = responseData.comments.map((comment) => {
                 return {
                     name: comment.author.name,
@@ -40,10 +47,9 @@ function getAllComments() {
                     likes: comment.likes
                 }
             });
+            commentLoaderElement.classList.add('hide-comment-loader');
             renderComments();
         })
-    });
-
 };
 
 // Вызов функции с GET-запросом для получения списка комментариев из API
@@ -58,14 +64,18 @@ const initLikeButtonListener = () => {
         likeButtonElement.addEventListener('click', (e) => {
             e.stopPropagation();
             const index = likeButtonElement.dataset.index;
-            if (comments[index].isLiked === false) {
-                comments[index].isLiked = true;
-                comments[index].likes++;
-            } else {
-                comments[index].isLiked = false;
-                comments[index].likes--;
-            }
-            renderComments();
+
+            likeButtonElement.classList.add('-loading-like');
+
+            delay(2000)
+                .then(() => {
+                    comments[index].likes = comments[index].isLiked
+                        ? comments[index].likes - 1
+                        : comments[index].likes + 1;
+                    comments[index].isLiked = !comments[index].isLiked;
+                    likeButtonElement.classList.remove('-loading-like');
+                    renderComments();
+                });
         });
 
     }
@@ -207,9 +217,6 @@ const renderInputBox = () => {
 
 }
 
-// Вызов рендер-функции для отрисовки списка комментариев
-renderComments();
-
 // Вызов рендер-функции для отрисовки формы ввода
 renderInputBox();
 
@@ -266,33 +273,28 @@ function initAddFormListener() {
         </div>
         `;
 
-        setTimeout(() => {
-            fetch(
-                "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        text: commentInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
-                        name: nameInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
-                            .replaceAll('QUOTE_BEGIN', '<div class="quote">').replaceAll('QUOTE_END', '</div>')
-                    })
-                }
-            ).then((response) => {
-                response.json().then((responseData) => {
-                    comments = responseData.comments;
+        fetch(
+            "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    text: commentInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+                    name: nameInputElement.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+                        .replaceAll('QUOTE_BEGIN', '<div class="quote">').replaceAll('QUOTE_END', '</div>')
                 })
-            });
-
-            // nameInputElement.value = '';
-            // commentInputElement.value = '';
-
-            renderInputBox();
-
-            getAllComments();
-        }, 3000);
+            }
+        )
+            .then((response) => {
+                return response.json();
+            })
+            .then(() => {
+                return getAllComments();
+            })
+            .then(() => {
+                renderInputBox();
+            })
     });
-}
-
+};
 
 // Добавление комментария на страницу по нажатию Enter
 const inputFormElement = document.querySelector('#input-form');
@@ -311,3 +313,12 @@ removeCommentButtonElement.addEventListener('click', () => {
     comments.splice(index, 1);
     renderComments();
 });
+
+// Функция для имитации запросов в API
+function delay(interval) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, interval);
+    });
+}
