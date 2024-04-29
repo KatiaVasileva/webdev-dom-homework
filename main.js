@@ -1,16 +1,20 @@
 /* Задание
-+ Я, как пользователь, понимаю, что ввел слишком короткую строчку в имя или текст комментария при добавлении комментария.
-+ Я, как пользователь, понимаю, что у меня пропал интернет и мне нужно повторить попытку добавить комментарий позже.
+Разбейте ваше приложение с лентой комментариев на модули.
+- main.js должен стать главным модулем, точкой входа. В нем должны остаться только импорты других модулей, а также код, который необходим для их работы.
+- При разбиении проекта учтите главные принципы создания модулей и постарайтесь сделать их универсальными.
 
-Что нужно сделать:
-+ Обработать 400-ю ошибку в POST-запросе на добавление комментария и показать пользователю alert.
-+ Обработать 500-е ошибки в запросе на получение комментов и на добавление коммента.
-+ Обработать ошибки типа «у пользователя пропал интернет» во всех запросах.
-+ Форма добавления не должна сбрасываться в случае ошибки.
-
-Дополнительное задание:
-+ Реализуйте автоматический повторный запрос в API в случае 500-го ответа.
+Критерии для самопроверки
+ 
+- В проекте отсутствуют дублирования кода, повторяющиеся части вынесены в отдельные модули.
+- Приложение запускается и работает без ошибок в консоли.
+- Сохранена логика предыдущего функционала (лайки, цитаты).
+- Только один файл скрипта (main.js) подключен в HTML-разметку.
+- В проекте есть модули для работы с API и отрисовки задач.
+- Проект очищен от неиспользуемого кода (объемные комментарии, неиспользуемые переменные и т. д.).
 */
+
+import { addComment, getAllComments } from "./modules/api.js";
+import { getTime, disableButton, enableButton } from "./modules/utilitities.js";
 
 const commentListElement = document.querySelector('#comment-list');
 const removeCommentButtonElement = document.querySelector('#remove-comment-button');
@@ -23,36 +27,25 @@ let comments = [];
 // Функция с GET-запросом для получения списка комментариев
 // В случае 500-го ответа выполняется автоматический повторный запрос в API.
 // В случае отсутствия интернета выводится alert.
-const getAllComments = () => {
+const fetchAndRenderComments = () => {
 
-    return fetch(
-        "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
-        {
-            method: "GET"
-        })
-        .then((response) => {
-            if (response.status === 500) {
-                throw new Error("Ошибка сервера");
+    getAllComments().then((responseData) => {
+        comments = responseData.comments.map((comment) => {
+            return {
+                name: comment.author.name,
+                date: getTime(new Date(comment.date)),
+                text: comment.text,
+                isLiked: comment.isLiked,
+                likes: comment.likes
             }
-            return response.json();
         })
-        .then((responseData) => {
-            comments = responseData.comments.map((comment) => {
-                return {
-                    name: comment.author.name,
-                    date: getTime(new Date(comment.date)),
-                    text: comment.text,
-                    isLiked: comment.isLiked,
-                    likes: comment.likes
-                }
-            })
-            commentLoaderElement.classList.add('hide-comment-loader');
-            renderComments();
-        })
+        commentLoaderElement.classList.add('hide-comment-loader');
+        renderComments();
+    })
         .catch((error) => {
             console.warn(error);
             if (error.message === "Ошибка сервера") {
-                getAllComments();
+                fetchAndRenderComments();
             } else {
                 alert("Кажется, у вас сломался интернет, попробуйте позже");
             };
@@ -60,7 +53,7 @@ const getAllComments = () => {
 };
 
 // Вызов функции с GET-запросом для получения списка комментариев из API
-getAllComments();
+fetchAndRenderComments();
 
 // Инициализация обработчика события для кнопок лайков: при нажатии на пустое сердечко оно закрашивается и 
 // счетчик увеличивается на единицу, при нажатии на закрашенное сердечко оно становится пустым и счетчик уменшается на единицу.
@@ -137,31 +130,6 @@ const initCommentReplyListener = () => {
             commentInputElement.value = `QUOTE_BEGIN ${comments[index].name}: \n ${comments[index].text}QUOTE_END \n \n`;
         });
     }
-}
-
-// Функция для получения даты и времени в формате: дд.мм.гг чч:мм
-function getTime(date) {
-    let timeOptions = { hour: '2-digit', minute: '2-digit' };
-    let formattedTime = date.toLocaleTimeString('ru-Ru', timeOptions);
-
-    let dateOptions = { day: '2-digit', month: '2-digit', year: '2-digit' };
-    let formattedDate = date.toLocaleDateString('ru-Ru', dateOptions);
-
-    return formattedDate + ' ' + formattedTime;
-}
-
-// Функция для дезактивирования кнопки "Написать"
-const disableButton = () => {
-    const addFormButtonElement = document.querySelector('.add-form-button');
-    addFormButtonElement.disabled = true;
-    addFormButtonElement.classList.add('add-form-button_disabled');
-}
-
-// Функция для активирования кнопки "Написать"
-const enableButton = () => {
-    const addFormButtonElement = document.querySelector('.add-form-button');
-    addFormButtonElement.disabled = false;
-    addFormButtonElement.classList.remove('add-form-button_disabled');
 }
 
 // Рендер-функция, которая отрисовывает список комментариев.
@@ -242,7 +210,7 @@ let commentInput = "";
 function initNameInputListener() {
     const nameInputElement = document.querySelector('#name-input');
     const commentInputElement = document.querySelector('#comment-input');
-    
+
     nameInputElement.addEventListener('input', (e) => {
         if (e.target.value.trim().length === 0) {
             disableButton();
@@ -274,40 +242,11 @@ function initCommentInputListener() {
 // В случае 500-го ответа выполняется автоматический повторный запрос в API.
 // В случае 400-го ответа выводится alert, форма не очищается.
 // В случае отсутствия интернета выводится alert.
-const addComment = (name, comment) => {
+const fetchAndPostComment = (name, comment) => {
 
-    return fetch(
-        "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
-        {
-            method: "POST",
-            body: JSON.stringify({
-                text: comment.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
-                name: name.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
-                    .replaceAll('QUOTE_BEGIN', '<div class="quote">').replaceAll('QUOTE_END', '</div>'),
-                forceError: true
-            })
-        }
-    )
-        .then((response) => {
-            if (response.status === 500) {
-                throw new Error("Ошибка сервера");
-            }
-
-            if (response.status === 400) {
-                console.log(response);
-                throw new Error("Плохой запрос");
-            }
-
-            addFormElement.innerHTML = `
-                <div class="comment-add-container">
-                    <p>Комментарий добавляется...</p>
-                    <img src="./spinner.svg" class="spinner">
-                </div>
-            `;
-            return response.json();
-        })
+    addComment({ name, comment })
         .then(() => {
-            return getAllComments();
+            return fetchAndRenderComments();
         })
         .then(() => {
             renderInputBox("", "");
@@ -318,7 +257,7 @@ const addComment = (name, comment) => {
             console.warn(error);
 
             if (error.message === "Ошибка сервера") {
-                addComment(name, comment);
+                fetchAndPostComment(name, comment);
             } else if (error.message === "Плохой запрос") {
                 alert("Имя и комментарий должны быть не короче трех символов");
             } else {
@@ -339,7 +278,7 @@ function initAddFormListener() {
 
     addFormButtonElement.addEventListener('click', () => {
 
-        addComment(nameInputElement.value, commentInputElement.value);
+        fetchAndPostComment(nameInputElement.value, commentInputElement.value);
 
     });
 };
