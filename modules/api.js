@@ -36,13 +36,6 @@ export function addComment({ name, comment }) {
                 console.log(response);
                 throw new Error("Плохой запрос");
             }
-
-            addFormElement.innerHTML = `
-                <div class="comment-add-container">
-                    <p>Комментарий добавляется...</p>
-                    <img src="./spinner.svg" class="spinner">
-                </div>
-            `;
             return response.json();
         });
 }
