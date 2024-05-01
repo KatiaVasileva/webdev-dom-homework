@@ -1,5 +1,8 @@
 import { initLikeButtonListener, initEditButtonListener, initSaveButtonListener, initCommentReplyListener } from "./init.js";
+import { disableButton } from "./utilitities.js";
+import { initNameInputListener, initCommentInputListener, initAddFormListener } from "./addComments.js";
 
+// Рендер-функция, которая отрисовывает список комментариев.
 export function renderComments({ comments }) {
   const commentListElement = document.querySelector('#comment-list');
 
@@ -30,3 +33,34 @@ export function renderComments({ comments }) {
   initCommentReplyListener({ comments });
 }
 
+// Рендер-функция, которая отрисовывает форму ввода комментрия.
+export function renderInputBox(name, comment) {
+  const addFormElement = document.querySelector('.add-form');
+
+  const inputBoxHtml = `
+  <input
+      id="name-input"
+      type="text"
+      class="add-form-name"
+      placeholder="Введите ваше имя (не менее трех символов)"
+      value="${name}"
+  />
+  <textarea
+      id="comment-input"
+      type="textarea"
+      class="add-form-text"
+      placeholder="Введите ваш комментарий (не менее трех символов)"
+      rows="4"
+  >${comment}</textarea>
+  <div class="add-form-row">
+      <button id="add-form-button" class="add-form-button">Написать</button>
+  </div>`;
+  addFormElement.innerHTML = inputBoxHtml;
+
+  initNameInputListener();
+  initCommentInputListener();
+  initAddFormListener();
+
+  disableButton();
+
+}
