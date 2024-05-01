@@ -1,8 +1,10 @@
-export function renderComments({ comments }) {
-    const commentListElement = document.querySelector('#comment-list');
+import { initLikeButtonListener, initEditButtonListener, initSaveButtonListener, initCommentReplyListener } from "./init.js";
 
-    const commentHtml = comments.map((comment, index) => {
-        return `<li class="comment" data-index="${index}">
+export function renderComments({ comments }) {
+  const commentListElement = document.querySelector('#comment-list');
+
+  const commentHtml = comments.map((comment, index) => {
+    return `<li class="comment" data-index="${index}">
         <div class="comment-header">
           <div>${comment.name}</div>
           <div>${comment.date}</div>
@@ -19,11 +21,12 @@ export function renderComments({ comments }) {
           </div>
         </div>
       </li>`
-    }).join("");
-    commentListElement.innerHTML = commentHtml;
+  }).join("");
+  commentListElement.innerHTML = commentHtml;
 
-    // initLikeButtonListener();
-    // initEditButtonListener();
-    // initSaveButtonListener();
-    // initCommentReplyListener();
+  initLikeButtonListener({ comments });
+  // initEditButtonListener({ comments });
+  // initSaveButtonListener({ comments });
+  initCommentReplyListener({ comments });
 }
+
