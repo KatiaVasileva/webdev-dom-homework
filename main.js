@@ -15,8 +15,8 @@
 
 import { addComment, getAllComments } from "./modules/api.js";
 import { getTime, disableButton, enableButton } from "./modules/utilitities.js";
+import { renderComments } from "./modules/renderComments.js";
 
-const commentListElement = document.querySelector('#comment-list');
 const removeCommentButtonElement = document.querySelector('#remove-comment-button');
 const addFormElement = document.querySelector('.add-form');
 const commentLoaderElement = document.querySelector('.comment-loader');
@@ -29,19 +29,21 @@ let comments = [];
 // В случае отсутствия интернета выводится alert.
 const fetchAndRenderComments = () => {
 
-    getAllComments().then((responseData) => {
-        comments = responseData.comments.map((comment) => {
-            return {
-                name: comment.author.name,
-                date: getTime(new Date(comment.date)),
-                text: comment.text,
-                isLiked: comment.isLiked,
-                likes: comment.likes
-            }
+    getAllComments()
+        .then((responseData) => {
+            comments = responseData.comments.map((comment) => {
+                return {
+                    name: comment.author.name,
+                    date: getTime(new Date(comment.date)),
+                    text: comment.text,
+                    isLiked: comment.isLiked,
+                    likes: comment.likes
+                }
+            });
+            commentLoaderElement.classList.add('hide-comment-loader');
+            renderComments({ comments });
+            return true;
         })
-        commentLoaderElement.classList.add('hide-comment-loader');
-        renderComments();
-    })
         .catch((error) => {
             console.warn(error);
             if (error.message === "Ошибка сервера") {
@@ -74,7 +76,7 @@ const initLikeButtonListener = () => {
                         : comments[index].likes + 1;
                     comments[index].isLiked = !comments[index].isLiked;
                     likeButtonElement.classList.remove('-loading-like');
-                    renderComments();
+                    renderComments({ comments });
                 });
         });
 
@@ -132,35 +134,6 @@ const initCommentReplyListener = () => {
     }
 }
 
-// Рендер-функция, которая отрисовывает список комментариев.
-const renderComments = () => {
-    const commentHtml = comments.map((comment, index) => {
-        return `<li class="comment" data-index="${index}">
-        <div class="comment-header">
-          <div>${comment.name}</div>
-          <div>${comment.date}</div>
-        </div>
-        <div class="comment-body">
-          <div class="comment-text">${comment.text}</div>
-        </div>
-        <button data-index="${index}" id="edit-comment-button" class="${comment.isEdit === false ? 'edit-comment-button' : 'edit-comment-button_none'}">Редактировать</button>
-        <button data-index="${index}" id="save-comment-button" class="${comment.isEdit === true ? 'save-comment-button' : 'save-comment-button_none'}">Сохранить</button>
-        <div class="comment-footer">
-          <div class="likes">
-            <span class="likes-counter">${comment.likes}</span>
-            <button data-index="${index}" class="like-button ${comment.isLiked === true ? '-active-like' : 'inherit'}"></button>
-          </div>
-        </div>
-      </li>`
-    }).join("");
-    commentListElement.innerHTML = commentHtml;
-
-    initLikeButtonListener();
-    // initEditButtonListener();
-    // initSaveButtonListener();
-    // initCommentReplyListener();
-}
-
 // Рендер-функция, которая отрисовывает форму ввода комментрия.
 const renderInputBox = (name, comment) => {
 
@@ -188,7 +161,7 @@ const renderInputBox = (name, comment) => {
     initCommentInputListener();
     initAddFormListener();
 
-    renderComments();
+    renderComments({ comments });
 
     disableButton();
 
@@ -298,7 +271,7 @@ inputFormElement.addEventListener('keyup', (e) => {
 removeCommentButtonElement.addEventListener('click', () => {
     let index = comments.length - 1;
     comments.splice(index, 1);
-    renderComments();
+    renderComments({ comments });
 });
 
 // Функция для имитации запросов в API
