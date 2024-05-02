@@ -44,20 +44,10 @@ export function initCommentInputListener() {
 // В случае 400-го ответа выводится alert, форма не очищается.
 // В случае отсутствия интернета выводится alert.
 export function fetchAndPostComment(name, comment) {
-    const addFormElement = document.querySelector('.add-form');
-    addFormElement.innerHTML = `
-            <div class="comment-add-container">
-                <p>Комментарий добавляется...</p>
-                <img src="./spinner.svg" class="spinner">
-            </div>
-        `;
 
     addComment({ name, comment })
         .then(() => {
             return fetchAndRenderComments();
-        })
-        .then(() => {
-            renderInputBox("", "");
         })
         .catch((error) => {
             renderInputBox(nameInput, commentInput);

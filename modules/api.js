@@ -1,6 +1,11 @@
+import { sanitizeHtml } from "./utilitities.js";
+
+const baseUrl = "https://wedev-api.sky.pro/api/v1/";
+
 export function getAllComments() {
+
     return fetch(
-        "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
+        baseUrl + "katia-vasileva/comments",
         {
             method: "GET"
         })
@@ -13,16 +18,14 @@ export function getAllComments() {
 }
 
 export function addComment({ name, comment }) {
-    const addFormElement = document.querySelector('.add-form');
 
     return fetch(
-        "https://wedev-api.sky.pro/api/v1/katia-vasileva/comments",
+        baseUrl + "katia-vasileva/comments",
         {
             method: "POST",
             body: JSON.stringify({
-                text: comment.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
-                name: name.replaceAll("<", "&lt;").replaceAll(">", "&gt;")
-                    .replaceAll('QUOTE_BEGIN', '<div class="quote">').replaceAll('QUOTE_END', '</div>'),
+                text: sanitizeHtml(comment),
+                name: sanitizeHtml(name),
                 forceError: false
             })
         }
