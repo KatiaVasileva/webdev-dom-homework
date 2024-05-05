@@ -1,4 +1,4 @@
-import { initLikeButtonListener, initEditButtonListener, initSaveButtonListener, initCommentReplyListener } from "./init.js";
+import { initLikeButtonListener, initEditButtonListener, initSaveButtonListener, initCommentReplyListener, initLoginButtonListener } from "./init.js";
 import { disableButton } from "./utilitities.js";
 import { initNameInputListener, initCommentInputListener, initAddFormListener } from "./addComments.js";
 
@@ -54,7 +54,8 @@ export function renderInputBox(name, comment) {
   >${comment}</textarea>
   <div class="add-form-row">
       <button id="add-form-button" class="add-form-button">Написать</button>
-  </div>`;
+  </div>
+  `;
   addFormElement.innerHTML = inputBoxHtml;
 
   initNameInputListener();
@@ -62,5 +63,29 @@ export function renderInputBox(name, comment) {
   initAddFormListener();
 
   disableButton();
+}
 
+// Рендер-функция, которая отрисовывает форму ввода логина и пароля
+export function renderLogin() {
+  const appElement = document.querySelector(".app");
+  
+  const loginHtml = `
+      <div class="container">
+      <div class="login-form" id="login-form">
+          <h3 class="login-form__title">Форма входа</h3>
+          <input type="text" class="login-form-input" id="login-input" placeholder="Введите логин">
+          <input type="text" class="login-form-input" id="password-input" placeholder="Введитие пароль">
+          <div class="login-form-row">
+              <button class="login-form-button" id="login-button">Войти</button>
+          </div>
+          <div class="register-link">
+              <a href="#" class="register-link__title">Зарегистрироваться</a>
+          </div>
+      </div>
+  </div>
+  `;
+
+  appElement.innerHTML = loginHtml;
+
+  initLoginButtonListener();
 }

@@ -1,3 +1,4 @@
+import { setToken, login } from "./api.js";
 import { renderComments } from "./renderElements.js";
 
 // Инициализация обработчика события для кнопок лайков: при нажатии на пустое сердечко оно закрашивается и 
@@ -78,6 +79,33 @@ export function initCommentReplyListener({ comments }) {
             commentInputElement.value = `QUOTE_BEGIN ${comments[index].name}: \n ${comments[index].text}QUOTE_END \n \n`;
         });
     }
+}
+
+// Инициализация обработчика события по клику на кнопку "Войти" в форме авторизации
+export function initLoginButtonListener() {
+    const loginButtonElement = document.querySelector("#login-button");
+    const loginInputElement = document.querySelector("#login-input");
+    const passwordInputElement = document.querySelector("#password-input");
+
+    loginButtonElement.addEventListener("click", () => {
+        login(
+            {
+                login: loginInputElement.value,
+                password: passwordInputElement.value
+            }
+        )
+        .then((responseData) => {
+            setToken(responseData.user.token);
+        })
+        .catch((error) => {
+            if (error.message === "Плохой запрос") {
+                alert("Вы ввели неправильные данные");
+            }
+        });
+
+        loginInputElement.value = "";
+        passwordInputElement.value = "";
+    });
 }
 
 // Функция для имитации запросов в API
