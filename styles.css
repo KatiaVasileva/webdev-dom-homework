@@ -227,7 +227,8 @@ body {
   height: 10%;
 }
 
-.hide-comment-loader {
+.hide-comment-loader,
+.hide-auth-link-text {
   display: none;
 }
 
@@ -247,4 +248,8 @@ body {
 
 .auth-link {
   color: #fff;
+}
+
+.auth-link-text {
+  text-align: center;
 }

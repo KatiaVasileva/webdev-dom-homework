@@ -1,5 +1,6 @@
 import { setToken, login } from "./api.js";
 import { renderComments } from "./renderElements.js";
+import { fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
 
 // Инициализация обработчика события для кнопок лайков: при нажатии на пустое сердечко оно закрашивается и 
 // счетчик увеличивается на единицу, при нажатии на закрашенное сердечко оно становится пустым и счетчик уменшается на единицу.
@@ -81,6 +82,9 @@ export function initCommentReplyListener({ comments }) {
     }
 }
 
+// Переменная для сохранения имени авторизованного пользователя
+export let userName;
+
 // Инициализация обработчика события по клику на кнопку "Войти" в форме авторизации
 export function initLoginButtonListener() {
     const loginButtonElement = document.querySelector("#login-button");
@@ -94,17 +98,28 @@ export function initLoginButtonListener() {
                 password: passwordInputElement.value
             }
         )
-        .then((responseData) => {
-            setToken(responseData.user.token);
-        })
-        .catch((error) => {
-            if (error.message === "Плохой запрос") {
-                alert("Вы ввели неправильные данные");
-            }
-        });
-
-        loginInputElement.value = "";
-        passwordInputElement.value = "";
+            .then((responseData) => {
+                setToken(responseData.user.token);
+                userName = responseData.user.name;
+            })
+            .then(() => {
+                const commentBoxElement = document.querySelector("#comment-box");
+                commentBoxElement.innerHTML = `
+                <div class="comment-add-container">
+                    <p>Авторизация...</p>
+                    <img src="./spinner.svg" class="spinner">
+                </div>
+            `;
+            })
+            .then(() => {
+                fetchAndRenderCommentsAfterLogin();
+                return true;
+            })
+            .catch((error) => {
+                if (error.message === "Плохой запрос") {
+                    alert("Вы ввели неправильные данные");
+                }
+            });
     });
 }
 

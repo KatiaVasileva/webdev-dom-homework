@@ -1,7 +1,7 @@
 import { addComment } from "./api.js";
 import { renderInputBox } from "./renderElements.js";
 import { enableButton, disableButton } from "./utilitities.js";
-import { fetchAndRenderComments } from "./fetchAndRenderComments.js";
+import { fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
 
 // Переменные для хранения текста, введенного пользователем
 let nameInput = "";
@@ -44,10 +44,17 @@ export function initCommentInputListener() {
 // В случае 400-го ответа выводится alert, форма не очищается.
 // В случае отсутствия интернета выводится alert.
 export function fetchAndPostComment(name, comment) {
+    const inpuFormBoxElement = document.querySelector("#input-form-box");
 
     addComment({ name, comment })
         .then(() => {
-            return fetchAndRenderComments();
+            inpuFormBoxElement.innerHTML = `
+                <div class="comment-add-container">
+                    <p>Комментарий добавляется...</p>
+                    <img src="./spinner.svg" class="spinner">
+                </div>
+            `;
+            return fetchAndRenderCommentsAfterLogin();
         })
         .catch((error) => {
             renderInputBox(nameInput, commentInput);
@@ -63,6 +70,8 @@ export function fetchAndPostComment(name, comment) {
                 enableButton();
             }
         });
+
+
 }
 
 // При нажатии на кнопку "Написать" отправляется POST-запрос для добавления нового комментария в API
@@ -78,5 +87,16 @@ export function initAddFormListener() {
 
         fetchAndPostComment(nameInputElement.value, commentInputElement.value);
 
+    });
+
+    const inputFormElement = document.querySelector('#input-form');
+    
+    // Обратчик события ввода комментария по Enter
+    inputFormElement.addEventListener('keyup', (e) => {
+        const addFormButtonElement = document.querySelector('.add-form-button');
+
+        if (e.key === 'Enter') {
+            addFormButtonElement.click();
+        }
     });
 }
