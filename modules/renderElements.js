@@ -1,4 +1,4 @@
-import { initLikeButtonListener, initEditButtonListener, initSaveButtonListener, initCommentReplyListener, initLoginButtonListener } from "./init.js";
+import { initLikeButtonListener, initEditButtonListener, initSaveButtonListener, initCommentReplyListener, initLoginButtonListener, initRegisterButtonListener, initRegisterLinkListener, initLoginLinkListener } from "./init.js";
 import { disableButton } from "./utilitities.js";
 import { initNameInputListener, initCommentInputListener, initAddFormListener } from "./addComments.js";
 
@@ -88,7 +88,7 @@ export function renderLogin() {
         <button class="login-form-button" id="login-button">Войти</button>
       </div>
       <div class="register-link">
-        <a href="#" class="register-link__title">Зарегистрироваться</a>
+        <a href="#" id="register-link" class="register-link__title">Зарегистрироваться</a>
       </div>
     </div>
   `;
@@ -96,4 +96,30 @@ export function renderLogin() {
   commentBoxElement.innerHTML = loginHtml;
 
   initLoginButtonListener();
+  initRegisterLinkListener();
+}
+
+// Рендер-функция, которая отрисовывает форму регистрации
+export function renderRegister() {
+  const commentBoxElement = document.querySelector("#comment-box");
+
+  const registerHtml = `
+    <div class="register-form" id="register-form">
+      <h3 class="register-form__title">Форма регистрации</h3>
+      <input type="text" class="register-form-input" id="register-name-input" placeholder="Введите имя">
+      <input type="text" class="register-form-input" id="register-login-input" placeholder="Введите логин">
+      <input type="text" class="register-form-input" id="register-password-input" placeholder="Введите пароль">
+      <div class="register-form-row">
+        <button class="register-form-button" id="register-button">Зарегистрироваться</button>
+      </div>
+      <div class="login-link">
+        <a href="#" id="login-link" class="login-link__title">Войти</a>
+      </div>
+    </div>
+  `;
+
+  commentBoxElement.innerHTML = registerHtml;
+
+  initRegisterButtonListener();
+  initLoginLinkListener();
 }

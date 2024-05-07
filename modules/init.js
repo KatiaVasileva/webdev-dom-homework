@@ -1,5 +1,5 @@
 import { setToken, login } from "./api.js";
-import { renderComments } from "./renderElements.js";
+import { renderComments, renderLogin, renderRegister } from "./renderElements.js";
 import { fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
 
 // Инициализация обработчика события для кнопок лайков: при нажатии на пустое сердечко оно закрашивается и 
@@ -115,6 +115,29 @@ export function initLoginButtonListener() {
                     alert("Вы ввели неправильные данные");
                 }
             });
+    });
+}
+
+// Инициализация обработчика события по клику на ссылку "Зарегистрироваться" в форме авторизации
+export function initRegisterLinkListener() {
+    const registerLinkElement = document.querySelector("#register-link");
+    
+    registerLinkElement.addEventListener("click", () => {
+        renderRegister();
+    })
+}
+
+
+export function initRegisterButtonListener() {
+    
+}
+
+// Инициализация обработчика события по клику на ссылку "Войти" в форме регистрации
+export function initLoginLinkListener() {
+    const loginLinkElement = document.querySelector("#login-link");
+    
+    loginLinkElement.addEventListener("click", () => {
+        renderLogin();
     });
 }
 

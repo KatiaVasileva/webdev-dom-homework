@@ -44,7 +44,8 @@ body {
 
 .comment,
 .add-form,
-.login-form {
+.login-form,
+.register-form {
   width: 596px;
   box-sizing: border-box;
   background: radial-gradient(75.42% 75.42% at 50% 42.37%,
@@ -132,21 +133,24 @@ body {
 }
 
 .add-form,
-.login-form {
+.login-form,
+.register-form {
   padding: 20px;
   margin-top: 48px;
   display: flex;
   flex-direction: column;
 }
 
-.login-form {
+.login-form,
+.register-form {
   row-gap: 20px;
 }
 
 .add-form-name,
 .add-form-text,
 .edit-comment-form-text,
-.login-form-input {
+.login-form-input,
+.register-form-input {
   font-size: 16px;
   font-family: Helvetica;
   border-radius: 8px;
@@ -160,9 +164,11 @@ body {
 .add-form-name {
   width: 340px;
   padding: 11px 22px;
+  background-color: #fafad2;
 }
 
-.login-form-input {
+.login-form-input,
+.register-form-input {
   padding: 22px 22px;
 }
 
@@ -178,7 +184,8 @@ body {
   justify-content: flex-end;
 }
 
-.login-form-row {
+.login-form-row,
+.register-form-row {
   display: flex;
   justify-content: center;
 }
@@ -187,7 +194,8 @@ body {
 .remove-comment-button,
 .edit-comment-button,
 .save-comment-button,
-.login-form-button {
+.login-form-button,
+.register-form-button {
   margin-top: 24px;
   font-size: 24px;
   padding: 10px 20px;
@@ -197,19 +205,22 @@ body {
   cursor: pointer;
 }
 
-.login-form-button {
+.login-form-button,
+.register-form-button {
   width: 100vw;
   margin-bottom: 20px;
 }
 
-.login-form-button_text-color {
+.login-form-button_text-color,
+.register-form-button_text-color {
   color: #a9a9a9;
 }
 
 .add-form-button:hover,
 .remove-comment-button:hover,
 .edit-comment-button:hover,
-.login-form-button:hover {
+.login-form-button:hover,
+.register-form-button:hover {
   opacity: 0.9;
 }
 
@@ -236,17 +247,20 @@ body {
   display: none;
 }
 
-.register-link {
+.register-link,
+.login-link {
   display: flex;
   justify-content: center;
 }
 
-.register-link__title {
+.register-link__title,
+.login-link__title {
   color: #fff;
   font-size: 20px;
 }
 
-.register-link__title:hover {
+.register-link__title:hover,
+.login-link__title:hover {
   text-decoration: none;
 }
 

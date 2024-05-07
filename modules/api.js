@@ -69,10 +69,30 @@ export function login({ login, password }) {
             })
         }
     )
+        .then((response) => {
+            if (response.status === 400) {
+                console.log(response);
+                throw new Error("Плохой запрос");
+            }
+            return response.json();
+        });
+}
+
+export function register({ login, name, password }) {
+    return fetch(
+        userUrl,
+        {
+            method: "POST",
+            body: JSON.stringify({
+                login,
+                name,
+                password
+            })
+        }
+    )
     .then((response) => {
         if (response.status === 400) {
-            console.log(response);
-            throw new Error("Плохой запрос");
+            throw new Error("Пользователь уже существует");
         }
         return response.json();
     });
