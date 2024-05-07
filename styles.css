@@ -202,6 +202,10 @@ body {
   margin-bottom: 20px;
 }
 
+.login-form-button_text-color {
+  color: #a9a9a9;
+}
+
 .add-form-button:hover,
 .remove-comment-button:hover,
 .edit-comment-button:hover,

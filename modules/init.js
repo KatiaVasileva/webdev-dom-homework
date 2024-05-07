@@ -103,13 +103,8 @@ export function initLoginButtonListener() {
                 userName = responseData.user.name;
             })
             .then(() => {
-                const commentBoxElement = document.querySelector("#comment-box");
-                commentBoxElement.innerHTML = `
-                <div class="comment-add-container">
-                    <p>Авторизация...</p>
-                    <img src="./spinner.svg" class="spinner">
-                </div>
-            `;
+                loginButtonElement.textContent = "Выполняется авторизация";
+                loginButtonElement.classList.add("login-form-button_text-color");
             })
             .then(() => {
                 fetchAndRenderCommentsAfterLogin();
