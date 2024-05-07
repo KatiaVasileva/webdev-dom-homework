@@ -1,4 +1,5 @@
-import { initLikeButtonListener, initEditButtonListener, initSaveButtonListener, initCommentReplyListener, initLoginButtonListener, initRegisterButtonListener, initRegisterLinkListener, initLoginLinkListener } from "./init.js";
+import { initLikeButtonListener, initEditButtonListener, initSaveButtonListener, initCommentReplyListener } from "./init.js";
+import { initLoginButtonListener, initRegisterButtonListener, initRegisterLinkListener, initLoginLinkListener, initLogoutButtonListener } from "./init.js";
 import { disableButton } from "./utilitities.js";
 import { initNameInputListener, initCommentInputListener, initAddFormListener } from "./addComments.js";
 
@@ -65,12 +66,14 @@ export function renderInputBox(name, comment) {
       <button id="add-form-button" class="add-form-button">Написать</button>
     </div>
   </div>
+  <button id="logout-button" class="logout-button">Выйти</button>
   `;
   inpuFormBoxElement.innerHTML = inputBoxHtml;
 
   initNameInputListener();
   initCommentInputListener();
   initAddFormListener();
+  initLogoutButtonListener();
 
   disableButton();
 }

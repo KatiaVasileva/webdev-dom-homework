@@ -195,7 +195,8 @@ body {
 .edit-comment-button,
 .save-comment-button,
 .login-form-button,
-.register-form-button {
+.register-form-button,
+.logout-button {
   margin-top: 24px;
   font-size: 24px;
   padding: 10px 20px;
@@ -211,6 +212,10 @@ body {
   margin-bottom: 20px;
 }
 
+.logout-button {
+  width: 596px;
+}
+
 .login-form-button_text-color,
 .register-form-button_text-color {
   color: #a9a9a9;
@@ -220,7 +225,8 @@ body {
 .remove-comment-button:hover,
 .edit-comment-button:hover,
 .login-form-button:hover,
-.register-form-button:hover {
+.register-form-button:hover,
+.logout-button:hover {
   opacity: 0.9;
 }
 

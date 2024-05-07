@@ -31,7 +31,7 @@ export function addComment({ name, comment }) {
         {
             method: "POST",
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${!localStorage.getItem("token") ? token : localStorage.getItem("token")}`
             },
             body: JSON.stringify({
                 text: sanitizeHtml(comment),
@@ -44,13 +44,10 @@ export function addComment({ name, comment }) {
             if (response.status === 500) {
                 throw new Error("Ошибка сервера");
             }
-
             if (response.status === 400) {
-                console.log(response);
                 throw new Error("Плохой запрос");
             }
             if (response.status === 401) {
-                console.log(response);
                 throw new Error("Нет авторизации");
             }
             return response.json();
@@ -71,7 +68,6 @@ export function login({ login, password }) {
     )
         .then((response) => {
             if (response.status === 400) {
-                console.log(response);
                 throw new Error("Плохой запрос");
             }
             return response.json();

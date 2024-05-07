@@ -1,6 +1,6 @@
 import { setToken, login, register } from "./api.js";
 import { renderComments, renderLogin, renderRegister } from "./renderElements.js";
-import { fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
+import { fetchAndRenderComments, fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
 
 // Инициализация обработчика события для кнопок лайков: при нажатии на пустое сердечко оно закрашивается и 
 // счетчик увеличивается на единицу, при нажатии на закрашенное сердечко оно становится пустым и счетчик уменшается на единицу.
@@ -24,7 +24,6 @@ export function initLikeButtonListener({ comments }) {
                     renderComments({ comments });
                 });
         });
-
     }
 }
 
@@ -101,6 +100,8 @@ export function initLoginButtonListener() {
             .then((responseData) => {
                 setToken(responseData.user.token);
                 userName = responseData.user.name;
+                localStorage.setItem("token", responseData.user.token);
+                localStorage.setItem("name", responseData.user.name);
             })
             .then(() => {
                 loginButtonElement.textContent = "Выполняется авторизация";
@@ -127,7 +128,7 @@ export function initRegisterLinkListener() {
     })
 }
 
-
+// Инициализация обработчика события по клику на кнопку "Зарегистрироваться" в форме регистрации
 export function initRegisterButtonListener() {
     const registerButtonElement = document.querySelector("#register-button");
     const registerNameInputElement = document.querySelector("#register-name-input");
@@ -165,6 +166,18 @@ export function initLoginLinkListener() {
     
     loginLinkElement.addEventListener("click", () => {
         renderLogin();
+    });
+}
+
+// Инициализация обработчика события по клику на кнопку "Выйти" в форме регистрации
+export function initLogoutButtonListener() {
+    const logoutButtonElement = document.querySelector("#logout-button");
+    const inpuFormBoxElement = document.querySelector("#input-form-box");
+
+    logoutButtonElement.addEventListener("click", () => {
+        localStorage.clear();
+        fetchAndRenderComments();
+        inpuFormBoxElement.innerHTML = "";
     });
 }
 

@@ -1,5 +1,5 @@
 import { addComment } from "./api.js";
-import { renderInputBox } from "./renderElements.js";
+import { renderInputBox, renderLogin } from "./renderElements.js";
 import { enableButton, disableButton } from "./utilitities.js";
 import { fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
 import { userName } from "./init.js";
@@ -66,6 +66,9 @@ export function fetchAndPostComment(name, comment) {
                 fetchAndPostComment(name, comment);
             } else if (error.message === "Плохой запрос") {
                 alert("Имя и комментарий должны быть не короче трех символов");
+            }else if (error.message === "Нет авторизации") {
+                alert("Вы не авторизованы");
+                renderLogin();
             } else {
                 alert("Кажется, у вас сломался интернет, попробуйте позже");
                 enableButton();
