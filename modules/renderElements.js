@@ -83,7 +83,7 @@ export function renderLogin() {
     <div class="login-form" id="login-form">
       <h3 class="login-form__title">Форма входа</h3>
       <input type="text" class="login-form-input" id="login-input" placeholder="Введите логин">
-      <input type="text" class="login-form-input" id="password-input" placeholder="Введитие пароль">
+      <input type="text" class="login-form-input" id="password-input" placeholder="Введите пароль">
       <div class="login-form-row">
         <button class="login-form-button" id="login-button">Войти</button>
       </div>

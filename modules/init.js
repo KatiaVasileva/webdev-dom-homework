@@ -1,4 +1,4 @@
-import { setToken, login } from "./api.js";
+import { setToken, login, register } from "./api.js";
 import { renderComments, renderLogin, renderRegister } from "./renderElements.js";
 import { fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
 
@@ -129,6 +129,33 @@ export function initRegisterLinkListener() {
 
 
 export function initRegisterButtonListener() {
+    const registerButtonElement = document.querySelector("#register-button");
+    const registerNameInputElement = document.querySelector("#register-name-input");
+    const registerLoginInputElement = document.querySelector("#register-login-input");
+    const registerPasswordInputElement = document.querySelector("#register-password-input");
+
+    registerButtonElement.addEventListener("click", () => {
+        register(
+            {
+                login: registerLoginInputElement.value,
+                name: registerNameInputElement.value,
+                password: registerPasswordInputElement.value
+            }
+        )
+        .then(() => {
+            registerButtonElement.textContent = "Выполняется регистрация";
+            registerButtonElement.classList.add("register-form-button_text-color");
+        })
+        .then(() => {
+            renderLogin();
+            return true;
+        })
+        .catch((error) => {
+            if (error.message === "Пользователь уже существует") {
+                alert("Такой пользователь уже существует");
+            }
+        })
+    })
     
 }
 
