@@ -7,6 +7,13 @@ export function fetchAndRenderComments() {
     const commentBoxElement = document.querySelector("#comment-box");
     commentBoxElement.textContent = "Подождите, пожалуйста, комментарии загружаются...";
 
+    let login = localStorage.getItem("login");
+    let password = localStorage.getItem('password');
+    if (login && password) {
+        fetchAndRenderCommentsAfterLogin();
+        return;
+    }
+
     getAllComments()
         .then((responseData) => {
             let comments = responseData.comments.map((comment) => {
