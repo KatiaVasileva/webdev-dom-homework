@@ -5,12 +5,7 @@ import { userName } from "./init.js";
 
 export function fetchAndRenderComments() {
     const commentBoxElement = document.querySelector("#comment-box");
-    commentBoxElement.innerHTML = `
-    <div class="comment-add-container">
-        <p>Подождите, пожалуйста, комментарии загружаются...</p>
-        <img src="./spinner.svg" class="spinner">
-    </div>
-`;
+    commentBoxElement.textContent = "Подождите, пожалуйста, комментарии загружаются...";
 
     getAllComments()
         .then((responseData) => {

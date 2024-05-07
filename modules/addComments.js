@@ -2,6 +2,7 @@ import { addComment } from "./api.js";
 import { renderInputBox } from "./renderElements.js";
 import { enableButton, disableButton } from "./utilitities.js";
 import { fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
+import { userName } from "./init.js";
 
 // Переменные для хранения текста, введенного пользователем
 let nameInput = "";
@@ -57,7 +58,7 @@ export function fetchAndPostComment(name, comment) {
             return fetchAndRenderCommentsAfterLogin();
         })
         .catch((error) => {
-            renderInputBox(nameInput, commentInput);
+            renderInputBox(userName, commentInput);
 
             console.warn(error);
 
@@ -90,7 +91,7 @@ export function initAddFormListener() {
     });
 
     const inputFormElement = document.querySelector('#input-form');
-    
+
     // Обратчик события ввода комментария по Enter
     inputFormElement.addEventListener('keyup', (e) => {
         const addFormButtonElement = document.querySelector('.add-form-button');
