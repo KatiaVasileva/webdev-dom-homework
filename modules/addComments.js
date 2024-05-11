@@ -2,7 +2,7 @@ import { addComment } from "./api.js";
 import { renderInputBox, renderLogin } from "./renderElements.js";
 import { enableButton, disableButton } from "./utilitities.js";
 import { fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
-import { userName } from "./init.js";
+import { userName } from "./loginRegisterComponent.js";
 
 // Переменные для хранения текста, введенного пользователем
 let nameInput = "";

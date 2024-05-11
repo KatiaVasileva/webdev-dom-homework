@@ -1,5 +1,5 @@
 import { initLikeButtonListener, initEditButtonListener, initSaveButtonListener, initCommentReplyListener } from "./init.js";
-import { initLoginButtonListener, initRegisterButtonListener, initRegisterLinkListener, initLoginLinkListener, initLogoutButtonListener } from "./init.js";
+import { initLoginButtonListener, initRegisterButtonListener, initRegisterLinkListener, initLoginLinkListener, initLogoutButtonListener } from "./loginRegisterComponent.js";
 import { disableButton } from "./utilitities.js";
 import { initNameInputListener, initCommentInputListener, initAddFormListener } from "./addComments.js";
 

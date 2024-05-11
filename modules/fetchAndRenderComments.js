@@ -1,7 +1,8 @@
 import { getAllComments } from "./api.js";
-import { getTime, sanitizeHtml } from "./utilitities.js";
+import { sanitizeHtml } from "./utilitities.js";
 import { renderComments, renderLogin, renderInputBox } from "./renderElements.js";
-import { userName } from "./init.js";
+import { userName } from "./loginRegisterComponent.js";
+import { format } from "date-fns";
 
 export function fetchAndRenderComments() {
     const commentBoxElement = document.querySelector("#comment-box");
@@ -13,7 +14,7 @@ export function fetchAndRenderComments() {
                 let comments = responseData.comments.map((comment) => {
                     return {
                         name: sanitizeHtml(comment.author.name),
-                        date: getTime(new Date(comment.date)),
+                        date: format(new Date(comment.date), "yyyy-MM-dd HH.mm.ss"),
                         text: sanitizeHtml(comment.text),
                         isLiked: comment.isLiked,
                         likes: comment.likes
@@ -48,7 +49,7 @@ export function fetchAndRenderCommentsAfterLogin() {
             let comments = responseData.comments.map((comment) => {
                 return {
                     name: sanitizeHtml(comment.author.name),
-                    date: getTime(new Date(comment.date)),
+                    date: format(new Date(comment.date), "yyyy-MM-dd HH.mm.ss"),
                     text: sanitizeHtml(comment.text),
                     isLiked: comment.isLiked,
                     likes: comment.likes
