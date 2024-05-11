@@ -4,7 +4,8 @@
   "description": "Comments",
   "main": "main.js",
   "scripts": {
-    "dev": "webpack --mode development --watch"
+    "dev": "webpack --mode development --watch",
+    "format": "prettier --write ./src/"
   },
   "author": "katiavasileva",
   "license": "ISC",

@@ -13,6 +13,3 @@ import { fetchAndRenderComments } from "./modules/fetchAndRenderComments.js";
 
 // Вызов функции с GET-запросом для получения списка комментариев из API и ссылкой на форму авторизации
 fetchAndRenderComments();
-
-
-

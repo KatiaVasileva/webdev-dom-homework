@@ -1,6 +1,9 @@
 import { setToken, login, register } from "./api.js";
 import { renderLogin, renderRegister } from "./renderElements.js";
-import { fetchAndRenderComments, fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
+import {
+    fetchAndRenderComments,
+    fetchAndRenderCommentsAfterLogin,
+} from "./fetchAndRenderComments.js";
 import _ from "lodash";
 
 // Переменная для сохранения имени авторизованного пользователя
@@ -13,12 +16,10 @@ export function initLoginButtonListener() {
     const passwordInputElement = document.querySelector("#password-input");
 
     loginButtonElement.addEventListener("click", () => {
-        login(
-            {
-                login: loginInputElement.value,
-                password: passwordInputElement.value
-            }
-        )
+        login({
+            login: loginInputElement.value,
+            password: passwordInputElement.value,
+        })
             .then((responseData) => {
                 setToken(responseData.user.token);
                 userName = responseData.user.name;
@@ -27,7 +28,9 @@ export function initLoginButtonListener() {
             })
             .then(() => {
                 loginButtonElement.textContent = "Выполняется авторизация";
-                loginButtonElement.classList.add("login-form-button_text-color");
+                loginButtonElement.classList.add(
+                    "login-form-button_text-color",
+                );
             })
             .then(() => {
                 fetchAndRenderCommentsAfterLogin();
@@ -44,47 +47,53 @@ export function initLoginButtonListener() {
 // Инициализация обработчика события по клику на ссылку "Зарегистрироваться" в форме авторизации
 export function initRegisterLinkListener() {
     const registerLinkElement = document.querySelector("#register-link");
-    
+
     registerLinkElement.addEventListener("click", () => {
         renderRegister();
-    })
+    });
 }
 
 // Инициализация обработчика события по клику на кнопку "Зарегистрироваться" в форме регистрации
 export function initRegisterButtonListener() {
     const registerButtonElement = document.querySelector("#register-button");
-    const registerNameInputElement = document.querySelector("#register-name-input");
-    const registerLoginInputElement = document.querySelector("#register-login-input");
-    const registerPasswordInputElement = document.querySelector("#register-password-input");
+    const registerNameInputElement = document.querySelector(
+        "#register-name-input",
+    );
+    const registerLoginInputElement = document.querySelector(
+        "#register-login-input",
+    );
+    const registerPasswordInputElement = document.querySelector(
+        "#register-password-input",
+    );
 
     registerButtonElement.addEventListener("click", () => {
-        register(
-            {
-                login: registerLoginInputElement.value,
-                name: _.capitalize(registerNameInputElement.value),
-                password: registerPasswordInputElement.value
-            }
-        )
-        .then(() => {
-            registerButtonElement.textContent = "Выполняется регистрация";
-            registerButtonElement.classList.add("register-form-button_text-color");
+        register({
+            login: registerLoginInputElement.value,
+            name: _.capitalize(registerNameInputElement.value),
+            password: registerPasswordInputElement.value,
         })
-        .then(() => {
-            renderLogin();
-            return true;
-        })
-        .catch((error) => {
-            if (error.message === "Пользователь уже существует") {
-                alert("Такой пользователь уже существует");
-            }
-        })
-    })
+            .then(() => {
+                registerButtonElement.textContent = "Выполняется регистрация";
+                registerButtonElement.classList.add(
+                    "register-form-button_text-color",
+                );
+            })
+            .then(() => {
+                renderLogin();
+                return true;
+            })
+            .catch((error) => {
+                if (error.message === "Пользователь уже существует") {
+                    alert("Такой пользователь уже существует");
+                }
+            });
+    });
 }
 
 // Инициализация обработчика события по клику на ссылку "Войти" в форме регистрации
 export function initLoginLinkListener() {
     const loginLinkElement = document.querySelector("#login-link");
-    
+
     loginLinkElement.addEventListener("click", () => {
         renderLogin();
     });

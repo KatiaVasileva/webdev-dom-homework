@@ -8,17 +8,20 @@ import { userName } from "./loginRegisterComponent.js";
 let nameInput = "";
 let commentInput = "";
 
-// Валидация полей ввода: кнопка "Написать" активна, только если оба поля ввода заполнены. Если, заполнив оба поля, пользователь решил очистить значения в одном из полей, 
+// Валидация полей ввода: кнопка "Написать" активна, только если оба поля ввода заполнены. Если, заполнив оба поля, пользователь решил очистить значения в одном из полей,
 // кнопка "Написать" становится неактивной.
 export function initNameInputListener() {
-    const nameInputElement = document.querySelector('#name-input');
-    const commentInputElement = document.querySelector('#comment-input');
+    const nameInputElement = document.querySelector("#name-input");
+    const commentInputElement = document.querySelector("#comment-input");
 
-    nameInputElement.addEventListener('input', (e) => {
+    nameInputElement.addEventListener("input", (e) => {
         if (e.target.value.trim().length === 0) {
             disableButton();
         }
-        if (commentInputElement.value.trim() !== '' && e.target.value.trim().length > 0) {
+        if (
+            commentInputElement.value.trim() !== "" &&
+            e.target.value.trim().length > 0
+        ) {
             enableButton();
         }
         nameInput = e.target.value;
@@ -26,14 +29,17 @@ export function initNameInputListener() {
 }
 
 export function initCommentInputListener() {
-    const commentInputElement = document.querySelector('#comment-input');
-    const nameInputElement = document.querySelector('#name-input');
+    const commentInputElement = document.querySelector("#comment-input");
+    const nameInputElement = document.querySelector("#name-input");
 
-    commentInputElement.addEventListener('input', (e) => {
+    commentInputElement.addEventListener("input", (e) => {
         if (e.target.value.trim().length === 0) {
             disableButton();
         }
-        if (nameInputElement.value.trim() !== '' && e.target.value.trim().length > 0) {
+        if (
+            nameInputElement.value.trim() !== "" &&
+            e.target.value.trim().length > 0
+        ) {
             enableButton();
         }
         commentInput = e.target.value;
@@ -66,7 +72,7 @@ export function fetchAndPostComment(name, comment) {
                 fetchAndPostComment(name, comment);
             } else if (error.message === "Плохой запрос") {
                 alert("Имя и комментарий должны быть не короче трех символов");
-            }else if (error.message === "Нет авторизации") {
+            } else if (error.message === "Нет авторизации") {
                 alert("Вы не авторизованы");
                 renderLogin();
             } else {
@@ -74,32 +80,28 @@ export function fetchAndPostComment(name, comment) {
                 enableButton();
             }
         });
-
-
 }
 
 // При нажатии на кнопку "Написать" отправляется POST-запрос для добавления нового комментария в API
-// и GET-запрос для получения актуального списка комментариев из API, после чего список комментариев отрисовывается на странице, 
+// и GET-запрос для получения актуального списка комментариев из API, после чего список комментариев отрисовывается на странице,
 // поля ввода очищаются, кнопка "Написать" дезактивируется.
 export function initAddFormListener() {
-    const addFormButtonElement = document.querySelector('.add-form-button');
+    const addFormButtonElement = document.querySelector(".add-form-button");
 
-    const commentInputElement = document.querySelector('#comment-input');
-    const nameInputElement = document.querySelector('#name-input');
+    const commentInputElement = document.querySelector("#comment-input");
+    const nameInputElement = document.querySelector("#name-input");
 
-    addFormButtonElement.addEventListener('click', () => {
-
+    addFormButtonElement.addEventListener("click", () => {
         fetchAndPostComment(nameInputElement.value, commentInputElement.value);
-
     });
 
-    const inputFormElement = document.querySelector('#input-form');
+    const inputFormElement = document.querySelector("#input-form");
 
     // Обратчик события ввода комментария по Enter
-    inputFormElement.addEventListener('keyup', (e) => {
-        const addFormButtonElement = document.querySelector('.add-form-button');
+    inputFormElement.addEventListener("keyup", (e) => {
+        const addFormButtonElement = document.querySelector(".add-form-button");
 
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             addFormButtonElement.click();
         }
     });
