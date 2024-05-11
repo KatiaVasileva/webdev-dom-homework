@@ -5,6 +5,7 @@ import { fetchAndRenderCommentsAfterLogin } from "./fetchAndRenderComments.js";
 import { userName } from "./loginRegisterComponent.js";
 
 // Переменные для хранения текста, введенного пользователем
+// eslint-disable-next-line no-unused-vars
 let nameInput = "";
 let commentInput = "";
 
