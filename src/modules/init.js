@@ -10,14 +10,14 @@ export function initLikeButtonListener({ comments }) {
             e.stopPropagation();
             const index = likeButtonElement.dataset.index;
 
-            likeButtonElement.classList.add("-loading-like");
+            likeButtonElement.classList.add("loading-like");
 
             delay(2000).then(() => {
                 comments[index].likes = comments[index].isLiked
                     ? comments[index].likes - 1
                     : comments[index].likes + 1;
                 comments[index].isLiked = !comments[index].isLiked;
-                likeButtonElement.classList.remove("-loading-like");
+                likeButtonElement.classList.remove("loading-like");
                 renderComments({ comments });
             });
         });

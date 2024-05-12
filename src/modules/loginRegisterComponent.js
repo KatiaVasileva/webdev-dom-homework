@@ -29,7 +29,7 @@ export function initLoginButtonListener() {
             .then(() => {
                 loginButtonElement.textContent = "Выполняется авторизация";
                 loginButtonElement.classList.add(
-                    "login-form-button_text-color",
+                    "login-form-button-text-color",
                 );
             })
             .then(() => {
@@ -75,7 +75,7 @@ export function initRegisterButtonListener() {
             .then(() => {
                 registerButtonElement.textContent = "Выполняется регистрация";
                 registerButtonElement.classList.add(
-                    "register-form-button_text-color",
+                    "register-form-button-text-color",
                 );
             })
             .then(() => {

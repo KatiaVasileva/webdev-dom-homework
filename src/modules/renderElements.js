@@ -34,12 +34,12 @@ export function renderComments({ comments }) {
         <div class="comment-body">
           <div class="comment-text">${comment.text}</div>
         </div>
-        <button data-index="${index}" id="edit-comment-button" class="${comment.isEdit === false ? "edit-comment-button" : "edit-comment-button_none"}">Редактировать</button>
-        <button data-index="${index}" id="save-comment-button" class="${comment.isEdit === true ? "save-comment-button" : "save-comment-button_none"}">Сохранить</button>
+        <button data-index="${index}" id="edit-comment-button" class="${comment.isEdit === false ? "edit-comment-button" : "edit-comment-button-none"}">Редактировать</button>
+        <button data-index="${index}" id="save-comment-button" class="${comment.isEdit === true ? "save-comment-button" : "save-comment-button-none"}">Сохранить</button>
         <div class="comment-footer">
           <div class="likes">
             <span class="likes-counter">${comment.likes}</span>
-            <button data-index="${index}" class="like-button ${comment.isLiked === true ? "-active-like" : "inherit"}"></button>
+            <button data-index="${index}" class="like-button ${comment.isLiked === true ? "active-like" : "inherit"}"></button>
           </div>
         </div>
       </li>`;
@@ -109,7 +109,7 @@ export function renderLogin() {
         <button class="login-form-button" id="login-button">Войти</button>
       </div>
       <div class="register-link">
-        <a href="#" id="register-link" class="register-link__title">Зарегистрироваться</a>
+        <a href="#" id="register-link" class="register-link-title">Зарегистрироваться</a>
       </div>
     </div>
   `;
@@ -134,7 +134,7 @@ export function renderRegister() {
         <button class="register-form-button" id="register-button">Зарегистрироваться</button>
       </div>
       <div class="login-link">
-        <a href="#" id="login-link" class="login-link__title">Войти</a>
+        <a href="#" id="login-link" class="login-link-title">Войти</a>
       </div>
     </div>
   `;

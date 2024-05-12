@@ -2,14 +2,14 @@
 export function disableButton() {
     const addFormButtonElement = document.querySelector(".add-form-button");
     addFormButtonElement.disabled = true;
-    addFormButtonElement.classList.add("add-form-button_disabled");
+    addFormButtonElement.classList.add("add-form-button-disabled");
 }
 
 // Функция для активирования кнопки "Написать"
 export function enableButton() {
     const addFormButtonElement = document.querySelector(".add-form-button");
     addFormButtonElement.disabled = false;
-    addFormButtonElement.classList.remove("add-form-button_disabled");
+    addFormButtonElement.classList.remove("add-form-button-disabled");
 }
 
 // Функция для обработки пользовательского ввода
