@@ -1,14 +1,31 @@
-import { initLikeButtonListener, initEditButtonListener, initSaveButtonListener, initCommentReplyListener } from "./init.js";
-import { initLoginButtonListener, initRegisterButtonListener, initRegisterLinkListener, initLoginLinkListener, initLogoutButtonListener } from "./init.js";
+// import {
+//     initLikeButtonListener,
+//     initEditButtonListener,
+//     initSaveButtonListener,
+//     initCommentReplyListener,
+// } from "./init.js";
+
+import {
+    initLoginButtonListener,
+    initRegisterButtonListener,
+    initRegisterLinkListener,
+    initLoginLinkListener,
+    initLogoutButtonListener,
+} from "./loginRegisterComponent.js";
 import { disableButton } from "./utilitities.js";
-import { initNameInputListener, initCommentInputListener, initAddFormListener } from "./addComments.js";
+import {
+    initNameInputListener,
+    initCommentInputListener,
+    initAddFormListener,
+} from "./addComments.js";
 
 // Рендер-функция, которая отрисовывает список комментариев.
 export function renderComments({ comments }) {
-  const commentBoxElement = document.querySelector("#comment-box");
+    const commentBoxElement = document.querySelector("#comment-box");
 
-  const commentHtml = comments.map((comment, index) => {
-    return `
+    const commentHtml = comments
+        .map((comment, index) => {
+            return `
     <li class="comment" data-index="${index}">
         <div class="comment-header">
           <div>${comment.name}</div>
@@ -17,35 +34,36 @@ export function renderComments({ comments }) {
         <div class="comment-body">
           <div class="comment-text">${comment.text}</div>
         </div>
-        <button data-index="${index}" id="edit-comment-button" class="${comment.isEdit === false ? 'edit-comment-button' : 'edit-comment-button_none'}">Редактировать</button>
-        <button data-index="${index}" id="save-comment-button" class="${comment.isEdit === true ? 'save-comment-button' : 'save-comment-button_none'}">Сохранить</button>
+        <button data-index="${index}" id="edit-comment-button" class="${comment.isEdit === false ? "edit-comment-button" : "edit-comment-button-none"}">Редактировать</button>
+        <button data-index="${index}" id="save-comment-button" class="${comment.isEdit === true ? "save-comment-button" : "save-comment-button-none"}">Сохранить</button>
         <div class="comment-footer">
           <div class="likes">
             <span class="likes-counter">${comment.likes}</span>
-            <button data-index="${index}" class="like-button ${comment.isLiked === true ? '-active-like' : 'inherit'}"></button>
+            <button data-index="${index}" class="like-button ${comment.isLiked === true ? "active-like" : "inherit"}"></button>
           </div>
         </div>
-      </li>`
-  }).join("");
+      </li>`;
+        })
+        .join("");
 
-  const commentBoxHtml = `
+    const commentBoxHtml = `
     <ul id="comment-list" class="comments">${commentHtml}</ul>
     <p class="auth-link-text">Чтобы добавить комментарий, <a href="#" class="auth-link"> авторизуйтесь</a></p>
   `;
 
-  commentBoxElement.innerHTML = commentBoxHtml;
+    commentBoxElement.innerHTML = commentBoxHtml;
 
-  // initLikeButtonListener({ comments });
-  // initEditButtonListener({ comments });
-  // initSaveButtonListener({ comments });
-  // initCommentReplyListener({ comments });
+    // initLikeButtonListener({ comments });
+    // initEditButtonListener({ comments });
+    // initSaveButtonListener({ comments });
+    // initCommentReplyListener({ comments });
 }
 
 // Рендер-функция, которая отрисовывает форму ввода комментрия.
 export function renderInputBox(name, comment) {
-  const inpuFormBoxElement = document.querySelector("#input-form-box");
+    const inpuFormBoxElement = document.querySelector("#input-form-box");
 
-  const inputBoxHtml = `
+    const inputBoxHtml = `
     <div id="input-form" class="add-form">
     <input
       id="name-input"
@@ -68,21 +86,21 @@ export function renderInputBox(name, comment) {
   </div>
   <button id="logout-button" class="logout-button">Выйти</button>
   `;
-  inpuFormBoxElement.innerHTML = inputBoxHtml;
+    inpuFormBoxElement.innerHTML = inputBoxHtml;
 
-  initNameInputListener();
-  initCommentInputListener();
-  initAddFormListener();
-  initLogoutButtonListener();
+    initNameInputListener();
+    initCommentInputListener();
+    initAddFormListener();
+    initLogoutButtonListener();
 
-  disableButton();
+    disableButton();
 }
 
 // Рендер-функция, которая отрисовывает форму ввода логина и пароля
 export function renderLogin() {
-  const commentBoxElement = document.querySelector("#comment-box");
+    const commentBoxElement = document.querySelector("#comment-box");
 
-  const loginHtml = `
+    const loginHtml = `
     <div class="login-form" id="login-form">
       <h3 class="login-form__title">Форма входа</h3>
       <input type="text" class="login-form-input" id="login-input" placeholder="Введите логин">
@@ -91,22 +109,22 @@ export function renderLogin() {
         <button class="login-form-button" id="login-button">Войти</button>
       </div>
       <div class="register-link">
-        <a href="#" id="register-link" class="register-link__title">Зарегистрироваться</a>
+        <a href="#" id="register-link" class="register-link-title">Зарегистрироваться</a>
       </div>
     </div>
   `;
 
-  commentBoxElement.innerHTML = loginHtml;
+    commentBoxElement.innerHTML = loginHtml;
 
-  initLoginButtonListener();
-  initRegisterLinkListener();
+    initLoginButtonListener();
+    initRegisterLinkListener();
 }
 
 // Рендер-функция, которая отрисовывает форму регистрации
 export function renderRegister() {
-  const commentBoxElement = document.querySelector("#comment-box");
+    const commentBoxElement = document.querySelector("#comment-box");
 
-  const registerHtml = `
+    const registerHtml = `
     <div class="register-form" id="register-form">
       <h3 class="register-form__title">Форма регистрации</h3>
       <input type="text" class="register-form-input" id="register-name-input" placeholder="Введите имя">
@@ -116,13 +134,13 @@ export function renderRegister() {
         <button class="register-form-button" id="register-button">Зарегистрироваться</button>
       </div>
       <div class="login-link">
-        <a href="#" id="login-link" class="login-link__title">Войти</a>
+        <a href="#" id="login-link" class="login-link-title">Войти</a>
       </div>
     </div>
   `;
 
-  commentBoxElement.innerHTML = registerHtml;
+    commentBoxElement.innerHTML = registerHtml;
 
-  initRegisterButtonListener();
-  initLoginLinkListener();
+    initRegisterButtonListener();
+    initLoginLinkListener();
 }
